@@ -30,12 +30,12 @@ public class CriarInterface extends JFrame implements ActionListener {
 		//Criar dados iniciais
 		
 	    Object [][] dados = {
-	            {lista.get(0).getNome(), lista.get(0).getCpf(), lista.get(0).getSalario()},
-	            {lista.get(1).getNome(), lista.get(1).getCpf(), lista.get(1).getSalario()},
-	            {lista.get(2).getNome(), lista.get(2).getCpf(), lista.get(2).getSalario()}
+	            {lista.get(0).getIdFuncionario(), lista.get(0).getNome(), lista.get(0).getCpf(), lista.get(0).getSalario()},
+	            {lista.get(1).getIdFuncionario(), lista.get(1).getNome(), lista.get(1).getCpf(), lista.get(1).getSalario()},
+	            {lista.get(2).getIdFuncionario(), lista.get(2).getNome(), lista.get(2).getCpf(), lista.get(2).getSalario()}
 	        };
 
-	    String [] colunas = {"Nome", "Cpf", "Salário"};
+	    String [] colunas = {"Id Funcionário","Nome", "Cpf", "Salário"};
 	    
 	    //Criar o tableModel
 	    
@@ -46,22 +46,26 @@ public class CriarInterface extends JFrame implements ActionListener {
 		JFrame meuFrame = new JFrame();
 		JTextField cadastrarNome = new JTextField();
 		JTextField cadastrarSalario = new JTextField();
+		JTextField excluirFuncionario = new JTextField();
+		JLabel excluirFuncionarioLabel = new JLabel();
 		JLabel cadastrarNomeLabel = new JLabel();
 		JLabel cadastrarCpfLabel = new JLabel();
 		JLabel cadastrarSalarioLabel = new JLabel();
-		MaskFormatter mascaraCampo = null;
+		MaskFormatter mascaraCampo1 = null;
 		try {
-		    mascaraCampo= new MaskFormatter("###.###.###-##");
+		    mascaraCampo1= new MaskFormatter("###.###.###-##");
 		}catch (ParseException e) {
 		}
-		JFormattedTextField cadastrarCpf = new JFormattedTextField(mascaraCampo);
+		JFormattedTextField cadastrarCpf = new JFormattedTextField(mascaraCampo1);
 	    JScrollPane barraRolagem;
 		Container c = new Container();
 		Container c1 = new Container();
 		Container cadastrarNomeContainer = new Container();
 		Container cadastrarCpfContainer = new Container();
 		Container cadastrarSalarioContainer = new Container();
+		Container excluirFuncionarioContainer = new Container();
 		JButton btn1 = new JButton("Adicionar");
+		JButton btn2 = new JButton("Excluir");
 		
 		//Mudar o modelo da tabela
 		
@@ -92,19 +96,30 @@ public class CriarInterface extends JFrame implements ActionListener {
         cadastrarSalarioContainer.add(cadastrarSalario);
         cadastrarSalarioContainer.setLayout(new GridLayout(1,1));
         
+        //Adicionando o campo Excluir Funcionário
+
+        excluirFuncionarioLabel.setText("     Digite o id do funcionário");
+        excluirFuncionarioContainer.add(excluirFuncionarioLabel);
+        excluirFuncionarioContainer.add(excluirFuncionario);
+        excluirFuncionarioContainer.setLayout(new GridLayout(1,1));
+        
         //Organizando os elementos na janela
         
-        cadastrarNomeContainer.setBounds(30, 10, 500, 50);
-        cadastrarCpfContainer.setBounds(30, 70, 500, 50);
-        cadastrarSalarioContainer.setBounds(30, 130, 500, 50);
+        cadastrarNomeContainer.setBounds(30, 10, 400, 50);
+        cadastrarCpfContainer.setBounds(30, 70, 400, 50);
+        cadastrarSalarioContainer.setBounds(30, 130, 400, 50);
+        excluirFuncionarioContainer.setBounds(520, 10, 400, 50);
         btn1.setBounds(30, 220, 250, 50);
+        btn2.setBounds(520, 220, 250, 50);
         
         //Adicionando os elementos ao container
         
         c.add(cadastrarNomeContainer);
         c.add(cadastrarCpfContainer);
         c.add(cadastrarSalarioContainer);
+        c.add(excluirFuncionarioContainer);
         c.add(btn1);
+        c.add(btn2);
         c1.add(barraRolagem);
         
         //Definindo Layout dos containers e da janela
@@ -129,6 +144,7 @@ public class CriarInterface extends JFrame implements ActionListener {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
+				
 				DefaultTableModel model = new DefaultTableModel();
 				
 				model = (DefaultTableModel) tabela.getModel();
@@ -136,16 +152,40 @@ public class CriarInterface extends JFrame implements ActionListener {
 				String nome = cadastrarNome.getText();
 				String cpf = cadastrarCpf.getText();
 				double salario = Double.parseDouble(cadastrarSalario.getText());
-				 
+		
+				
 				Object[] linha = {
-						nome, cpf, salario
+					 	 (lista.size() + 1 ),nome, cpf, salario
 				};
+				
+				
+				
+				lista.add(new Funcionario((lista.size() + 1 ),nome, cpf, salario));
 				 
 				model.addRow(linha);
 
 			}
         	
         });
+        
+        btn2.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+				DefaultTableModel model = new DefaultTableModel();
+				
+				model = (DefaultTableModel) tabela.getModel();
+				
+				int idFuncionario = Integer.parseInt(excluirFuncionario.getText()) - 1;
+				
+				model.removeRow(idFuncionario);
+				
+			}
+        	
+        });
+        
 
 	}
 	
